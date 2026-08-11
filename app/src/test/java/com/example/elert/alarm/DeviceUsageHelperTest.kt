@@ -52,6 +52,6 @@ class DeviceUsageHelperTest {
 
     private fun setKeyguardLocked(context: Context, locked: Boolean) {
         val keyguardManager = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
-        Shadows.shadowOf(keyguardManager).setIsKeyguardLocked(locked)
+        Shadows.shadowOf(keyguardManager).setKeyguardLocked(locked)
     }
 }

@@ -47,6 +47,11 @@ Memory is limited. "Mental notes" don't survive session restarts; files do. Befo
 - When asked for a task: create a feature branch (`feature/<short-name>`), do the work there, push it, and open a PR **against `develop`**.
 - PRs are merged only after review/approval; merging to `main` happens only via `develop` for production releases.
 
+## Build & Push Rule
+
+- After finishing any task, **always run the build** (`./gradlew assembleDebug` or `docker build`).
+- **Push the built APK to GitHub together with the changes** (store it under `builds/`), so the repo always carries the latest working build with the code.
+
 ## Red Lines
 
 - Don't exfiltrate private data. Ever.
