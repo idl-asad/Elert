@@ -8,13 +8,15 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(
-    entities = [RuleEntity::class],
-    version = 3,
+    entities = [RuleEntity::class, AlarmHistoryEntity::class],
+    version = 4,
     exportSchema = false
 )
 abstract class ElertDatabase : RoomDatabase() {
 
     abstract fun ruleDao(): RuleDao
+
+    abstract fun alarmHistoryDao(): AlarmHistoryDao
 
     companion object {
         @Volatile
@@ -59,6 +61,25 @@ abstract class ElertDatabase : RoomDatabase() {
             }
         }
 
+        private val MIGRATION_3_4 = object : Migration(3, 4) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    """
+                    CREATE TABLE IF NOT EXISTS alarm_history (
+                        id TEXT NOT NULL PRIMARY KEY,
+                        ruleId TEXT NOT NULL,
+                        ruleTitle TEXT NOT NULL,
+                        appName TEXT NOT NULL,
+                        keywordsJson TEXT NOT NULL,
+                        notificationTitle TEXT NOT NULL,
+                        notificationBody TEXT NOT NULL,
+                        triggeredAt INTEGER NOT NULL
+                    )
+                    """.trimIndent()
+                )
+            }
+        }
+
         fun getInstance(context: Context): ElertDatabase {
             return instance ?: synchronized(this) {
                 instance ?: Room.databaseBuilder(
@@ -66,7 +87,7 @@ abstract class ElertDatabase : RoomDatabase() {
                     ElertDatabase::class.java,
                     "elert.db"
                 )
-                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
                     .build()
                     .also { instance = it }
             }

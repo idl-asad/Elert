@@ -60,6 +60,8 @@ import com.example.elert.viewmodel.RuleViewModel
 @Composable
 fun HomeScreen(
     onNavigateToAddRule: () -> Unit,
+    onNavigateToRules: () -> Unit,
+    onNavigateToHistory: () -> Unit,
     onNavigateToSettings: () -> Unit,
     viewModel: RuleViewModel = viewModel()
 ) {
@@ -119,7 +121,9 @@ fun HomeScreen(
                     onTabSelected = { tab ->
                         when (tab) {
                             BottomNavTab.Settings -> onNavigateToSettings()
-                            BottomNavTab.Home, BottomNavTab.Rules, BottomNavTab.History -> Unit
+                            BottomNavTab.Rules -> onNavigateToRules()
+                            BottomNavTab.History -> onNavigateToHistory()
+                            BottomNavTab.Home -> Unit
                         }
                     }
                 )
@@ -173,7 +177,7 @@ fun HomeScreen(
                             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
                             fontWeight = FontWeight.Medium
                         )
-                        TextButton(onClick = { /* Rules tab — future */ }) {
+                        TextButton(onClick = onNavigateToRules) {
                             Text(
                                 text = "View All",
                                 style = MaterialTheme.typography.labelMedium,
