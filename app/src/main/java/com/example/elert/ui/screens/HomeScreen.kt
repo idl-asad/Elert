@@ -50,6 +50,7 @@ import com.example.elert.ui.components.DashboardStatCard
 import com.example.elert.ui.components.ElertBottomBar
 import com.example.elert.ui.components.EmptyState
 import com.example.elert.ui.components.MonitoringPanel
+import com.example.elert.ui.components.PermissionStatusCard
 import com.example.elert.ui.components.RuleCard
 import com.example.elert.ui.theme.ElertBackground
 import com.example.elert.ui.theme.ElertGlassBorder
@@ -141,6 +142,10 @@ fun HomeScreen(
                 ),
                 verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
+                item {
+                    PermissionStatusCard()
+                }
+
                 item {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
