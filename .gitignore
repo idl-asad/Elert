@@ -15,3 +15,5 @@ local.properties
 *.aab
 *.dex
 *.class
+media/
+openclaw-workspace-state.json
