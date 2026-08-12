@@ -6,6 +6,8 @@ import android.webkit.WebView
 import com.example.elert.alarm.AlarmNotificationHelper
 import com.example.elert.data.local.ElertDatabase
 import com.example.elert.data.local.RuleSeedData
+import com.example.elert.data.repository.AlarmHistoryRepository
+import com.example.elert.data.repository.RoomAlarmHistoryRepository
 import com.example.elert.data.repository.RoomRuleRepository
 import com.example.elert.data.repository.RuleRepository
 import kotlinx.coroutines.CoroutineScope
@@ -18,6 +20,9 @@ class ElertApplication : Application() {
     lateinit var ruleRepository: RuleRepository
         private set
 
+    lateinit var alarmHistoryRepository: AlarmHistoryRepository
+        private set
+
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     override fun onCreate() {
@@ -26,11 +31,12 @@ class ElertApplication : Application() {
             WebView.setWebContentsDebuggingEnabled(true)
         }
         AlarmNotificationHelper.createChannel(this)
-        val dao = ElertDatabase.getInstance(this).ruleDao()
-        ruleRepository = RoomRuleRepository(dao, applicationScope)
+        val database = ElertDatabase.getInstance(this)
+        ruleRepository = RoomRuleRepository(database.ruleDao(), applicationScope)
+        alarmHistoryRepository = RoomAlarmHistoryRepository(database.alarmHistoryDao(), applicationScope)
         applicationScope.launch(Dispatchers.IO) {
-            if (dao.count() == 0) {
-                dao.insertAll(RuleSeedData.sampleRules())
+            if (database.ruleDao().count() == 0) {
+                database.ruleDao().insertAll(RuleSeedData.sampleRules())
             }
         }
     }
